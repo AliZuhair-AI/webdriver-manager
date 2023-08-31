@@ -259,7 +259,11 @@ function unzip<T extends Binary>(binary: T, outputDir: string, fileName: string)
   }
 
   // rename
-  fs.renameSync(path.resolve(outputDir, binary.zipContentName()), mv);
+  if (fileName.indexOf('chromedriver_') != -1) {
+    fs.renameSync(path.resolve(outputDir, 'chromedriver-win64', binary.zipContentName()), mv)
+  } else {
+    fs.renameSync(path.resolve(outputDir, binary.zipContentName()), mv);
+  }
 
   // set permissions
   if (osType !== 'Windows_NT') {
