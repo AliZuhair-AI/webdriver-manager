@@ -260,7 +260,7 @@ function unzip<T extends Binary>(binary: T, outputDir: string, fileName: string)
 
   // rename
   if (fileName.indexOf('chromedriver_') != -1) {
-    fs.renameSync(path.resolve(outputDir, 'chromedriver-win64', binary.zipContentName()), mv)
+    fs.renameSync(path.resolve(outputDir, 'chromedriver-win32', binary.zipContentName()), mv)
   } else {
     fs.renameSync(path.resolve(outputDir, binary.zipContentName()), mv);
   }

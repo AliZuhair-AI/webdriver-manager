@@ -67,35 +67,25 @@ export class ChromeXml extends XmlConfigSource {
    * Gets the latest item from the XML.
    */
   private getLatestChromeDriverVersion(): Promise<BinaryUrl> {
-    console.log('getLatestChromeDriverVersion');
     const latestReleaseUrl: string =
         'https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json';
-    console.log('getLatestChromeDriverVersion url: ', latestReleaseUrl);
     return requestBody(latestReleaseUrl).then(body => {
-      const latestVersion_Body = JSON.parse(body)['channels']['Stable']
-      console.log('getLatestChromeDriverVersion latestVersion_Body: ', latestVersion_Body);
+      const latestVersion_Body = JSON.parse(body)['channels']['Stable'];
       const latestVersion = latestVersion_Body['version'];
-      console.log('getLatestChromeDriverVersion latestVersion: ', latestVersion);
       const latestVersion_Url = latestVersion_Body['downloads']['chromedriver'].find(
-          (obj: any) => obj['platform'] == 'win64')['url'];
-      console.log('getLatestChromeDriverVersion latestVersion_Url: ', latestVersion_Url);
+          (obj: any) => obj['platform'] == 'win32')['url'];
 
       const latestMajorVersion: string = latestVersion.split('.')[0];
-      console.log('getLatestChromeDriverVersion latestMajorVersion: ', latestMajorVersion);
 
       const localVersion_FileName: string =
           fs.readdirSync(path.resolve(__dirname, '..', '..', '..', 'selenium'))
               .find(f => f.startsWith(`chromedriver_${latestMajorVersion}`)) ||
           '';
-      console.log('getLatestChromeDriverVersion localVersion_FileName: ', localVersion_FileName);
 
       const localVersion: string = localVersion_FileName.slice(13, -4);
-      console.log('getLatestChromeDriverVersion localVersion: ', localVersion);
       const localVersion_Url: string = latestVersion_Url.replace(latestVersion, localVersion);
-      console.log('getLatestChromeDriverVersion localVersion_Url: ', localVersion_Url);
 
       const localMajorVersion: string = localVersion.split('.')[0];
-      console.log('getLatestChromeDriverVersion localMajorVersion: ', localMajorVersion);
 
       if (latestMajorVersion == localMajorVersion) {
         return Promise.resolve({
